@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Admin Dashboard</h1>
+        <div class="nav-links">
+            <a onclick="loadContent('manage-subject')">Manage Subjects</a>
+            <a onclick="loadContent('manage-student')">Manage Students</a>
+            <a onclick="loadContent('manage-grades')">Manage Grades</a>
+        </div>
+        <div>Hi, Admin {{ user.name }}</div>
+        <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Manage Subjects Section -->
+        <div class="content-area" id="manage-subject">
+            <h1 class="text-2xl font-bold text-center mb-4">Manage Subjects</h1>
+
+            <!-- Form to Add or Edit Subject -->
+            <form id="subject-form" class="mb-4">
+                <input type="hidden" id="subject-id" value="">
+
+                <div class="flex justify-center space-x-4">
+                    <input type="text" id="subject-code" placeholder="Subject Code" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="subject-name" placeholder="Subject Name" class="p-2 border border-gray-300 rounded" required>
+                    <input type="number" id="subject-credits" placeholder="Credits" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="prof-id" placeholder="Professor Id" class="p-2 border border-gray-300 rounded" required>
+                    <button type="submit" id="add-subject-btn" class="bg-green-500 text-white p-2 rounded">
+                        Add
+                    </button>
+                </div>
+            </form>
+
+            <!-- Subjects Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Credits</th>
+                        <th>Professor Id</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="subjects-table-body">
+                    <!-- Dynamic Rows Will Be Added Here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Manage Students Section -->
+        <div class="content-area" id="manage-student">
+            <h1 class="text-2xl font-bold text-center mb-4">Manage Students</h1>
+            <form id="student-form" class="mb-4">
+                <div class="flex justify-center space-x-4">
+                    <input type="text" id="student-name" placeholder="Name" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="student-department" placeholder="Department" class="p-2 border border-gray-300 rounded" required>
+                    <input type="number" id="admission-year" placeholder="Admission Year" class="p-2 border border-gray-300 rounded" required>
+                    <button type="submit" class="bg-green-500 text-white p-2 rounded">Add Student</button>
+                </div>
+            </form>
+            <table class="w-full border border-gray-300 rounded">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="p-2">ID</th>
+                        <th class="p-2">Name</th>
+                        <th class="p-2">Department</th>
+                        <th class="p-2">Admission Year</th>
+                        <th class="p-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Manage Grades Section -->
+        <div class="content-area" id="manage-grades">
+            <h1 class="text-2xl font-bold text-center mb-4">Manage Grades</h1>
+            <form id="grades-form" class="mb-4">
+                <input type="hidden" id="grade-id" value="">
+
+                <div class="flex justify-center space-x-4">
+                    <input type="text" id="semester" placeholder="Semester" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="student-id" placeholder="Student Id" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="subject-code-grade" placeholder="Subject Code" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="grade" placeholder="Grade" class="p-2 border border-gray-300 rounded" required>
+                    <input type="text" id="score" placeholder="Score" class="p-2 border border-gray-300 rounded" required>
+                    <button type="submit" id="add-grade-btn" class="bg-green-500 text-white p-2 rounded">
+                        Add
+                    </button>
+                </div>
+            </form>
+            <h2>All Grades</h2>
+            <table id="gradesTable">
+                <thead>
+                    <tr>
+                        <th>Subject Code</th>
+                        <th>Student ID</th>
+                        <th>Semester</th>
+                        <th>Grade</th>
+                        <th>Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="grades-table-body">
+                    {% for grade in grades %}
+                    <tr>
+                        <td>{{ grade.subject_code }}</td>
+                        <td>{{ grade.student_id }}</td>
+                        <td>{{ grade.semester }}</td>
+                        <td>{{ grade.grade }}</td>
+                        <td>{{ grade.score }}</td>
+                        <td>
+                            <button class="delete-btn" data-grade-id="{{ grade.id }}">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Function to load specific content based on navbar link click
+        function loadContent(contentId) {
+            document.querySelectorAll('.content-area').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(contentId).classList.add('active');
+        }
+
+        // Set the default view to "Manage Subjects"
+        loadContent('manage-subject');
+
+        // Fetch and display subjects
+        async function fetchSubjects() {
+            try {
+                const response = await fetch('/subjects');
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                const subjects = await response.json();
+
+                const subjectsTableBody = document.getElementById('subjects-table-body');
+                subjectsTableBody.innerHTML = ''; // Clear existing rows
+
+                subjects.forEach(subject => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${subject.code}</td>
+                        <td>${subject.name}</td>
+                        <td>${subject.credits}</td>
+                        <td>${subject.professor_id}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editSubject(${subject.id}, '${subject.code}', '${subject.name}', ${subject.credits}, '${subject.professor_id}')">
+                                Edit
+                            </button>
+                            <button class="delete-btn" onclick="deleteSubject(${subject.id})">Delete</button>
+                        </td>
+                    `;
+                    subjectsTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching subjects:', error);
+            }
+        }
+
+        // Handle adding a subject
+        document.querySelector('#subject-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('#add-subject-btn');
+            button.disabled = true;
+            button.innerText = 'Adding...';
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/subjects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('confirmation-message').innerText = 'Subject added successfully!';
+                    e.target.reset(); // Reset the form
+                    await fetchSubjects(); // Refresh the subjects table
+                } else {
+                    alert(result.error || 'Failed to add subject.');
+                }
+            } catch (error) {
+                console.error('Error adding subject:', error);
+                alert('An error occurred while adding the subject.');
+            } finally {
+                button.disabled = false;
+                button.innerText = 'Add Subject';
+            }
+        });
+
+        // Initial fetch of subjects on page load
+        window.onload = () => {
+            fetchSubjects();
+        };
+
+
+        // Edit a subject
+        function editSubject(id, code, name, credits, professor_id) {
+            document.getElementById('subject-id').value = id;
+            document.getElementById('subject-code').value = code;
+            document.getElementById('subject-name').value = name;
+            document.getElementById('subject-credits').value = credits;
+            document.getElementById('prof-id').value = professor_id;
+        }
+
+        // Delete a subject
+        async function deleteSubject(id) {
+            try {
+                const response = await fetch(`/subjects/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                await fetchSubjects(); // Refresh subjects table
+            } catch (error) {
+                console.error('Error deleting subject:', error);
+            }
+        }
+
+        // Fetch and display students on load
+        async function fetchStudents() {
+            try {
+                const response = await fetch('/students');
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                const students = await response.json();
+
+                const studentsTableBody = document.getElementById('students-table-body');
+                studentsTableBody.innerHTML = ''; // Clear existing rows
+
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.id}</td>
+                        <td>${student.name}</td>
+                        <td>${student.department}</td>
+                        <td>${student.admission_year}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editStudent(${student.id}, '${student.name}', '${student.department}', ${student.admission_year})">Edit</button>
+                            <button class="delete-btn" onclick="deleteStudent(${student.id})">Delete</button>
+                        </td>
+                    `;
+                    studentsTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        }
+
+        // Handle adding a student
+        document.getElementById('student-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('student-name').value;
+            const department = document.getElementById('student-department').value;
+            const admission_year = document.getElementById('admission-year').value;
+
+            try {
+                const response = await fetch('/students', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, department, admission_year })
+                });
+
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                await fetchStudents(); // Refresh students table
+                document.getElementById('student-form').reset(); // Reset form
+            } catch (error) {
+                console.error('Error adding student:', error);
+            }
+        });
+
+        // Edit a student
+        function editStudent(id, name, department, admission_year) {
+            document.getElementById('student-name').value = name;
+            document.getElementById('student-department').value = department;
+            document.getElementById('admission-year').value = admission_year;
+        }
+
+        // Delete a student
+        async function deleteStudent(id) {
+            try {
+                const response = await fetch(`/students/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                await fetchStudents(); // Refresh students table
+            } catch (error) {
+                console.error('Error deleting student:', error);
+            }
+        }
+
+        // Fetch and display grades on load
+        async function fetchGrades() {
+            try {
+                const response = await fetch('/grades');
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                const grades = await response.json();
+
+                const gradesTableBody = document.getElementById('grades-table-body');
+                gradesTableBody.innerHTML = ''; // Clear existing rows
+
+                grades.forEach(grade => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${grade.subject_code}</td>
+                        <td>${grade.student_id}</td>
+                        <td>${grade.semester}</td>
+                        <td>${grade.grade}</td>
+                        <td>${grade.score}</td>
+                        <td>
+                            <button onclick="deleteGrade(${grade.id})">Delete</button>
+                        </td>
+                    `;
+                    gradesTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching grades:', error);
+            }
+        }
+
+        // Handle adding a grade
+        document.getElementById('grades-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const semester = document.getElementById('semester').value;
+            const student_id = document.getElementById('student-id').value;
+            const subject_code = document.getElementById('subject-code-grade').value;
+            const grade = document.getElementById('grade').value;
+            const score = document.getElementById('score').value;
+
+            try {
+                const response = await fetch('/grades', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ semester, student_id, subject_code, grade, score })
+                });
+
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                await fetchGrades(); // Refresh grades table
+                document.getElementById('grades-form').reset(); // Reset form
+            } catch (error) {
+                console.error('Error adding grade:', error);
+            }
+        });
+
+        // Delete a grade
+        async function deleteGrade(id) {
+            try {
+                const response = await fetch(`/grades/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                await fetchGrades(); // Refresh grades table
+            } catch (error) {
+                console.error('Error deleting grade:', error);
+            }
+        }
+
+         // Redirect to the index page on Logout
+         document.getElementById('logout-btn').addEventListener('click', function () {
+            window.location.href = '/index';
+        });
+        // Initial fetch calls
+        fetchSubjects();
+        fetchStudents();
+        fetchGrades();
+    </script>
+</body>
+</html>

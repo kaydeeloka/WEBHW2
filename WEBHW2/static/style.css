@@ -1,0 +1,227 @@
+/* Body and default styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0; /* Remove body margin */
+}
+
+/* Container styles */
+.container {
+    display: flex;
+    justify-content: center; /* Center the content */
+    align-items: center; /* Center vertically */
+    height: calc(100vh - 100px); /* Full height minus header and footer */
+}
+
+ /* General Styles */
+ body {
+    background: linear-gradient(to right, #ff416c, pink);
+    font-family: 'Arial', sans-serif; /* Use a nice font */
+}
+
+/* Login Container Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+/* Form Styles */
+.bg-white {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Set a fixed width */
+}
+
+h2.login-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Dark color for title */
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.login-form input:focus {
+    border-color: #ff4b2b; /* Highlight border on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 75, 43, 0.5); /* Soft glow */
+}
+
+/* Dropdown Styles */
+.role-dropdown {
+    width: 100%; /* Full width */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    appearance: none; /* Remove default styling */
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIElEQVR42mJ8+uHjv4IB0AikOgDDBxFoDCIKAAAAABJRU5ErkJggg==') no-repeat right 10px center; /* Add a dropdown arrow */
+    background-size: 1rem; /* Size the arrow */
+}
+
+/* Button Styles */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff4b2b; /* Darken button on hover */
+    color: white; /* Ensure text is visible */
+}
+
+.login-btn {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    width: 100%; /* Full width for button */
+}
+/* Button styles */
+.button-login {
+    background-color: rgb(238, 114, 135);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%; /* Full width */
+}
+
+.button-login:hover {
+    background-color: #dc3545;
+}
+
+/* Info text styles */
+.info-text {
+    font-size: 0.8em;
+    color: #555;
+    margin-top: 10px;
+    text-align: center; /* Center the info text */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: #2d3748;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.nav-links a:hover {
+    background-color: #4a5568;
+}
+
+.logout-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+/* Content Area Styling */
+.content {
+    padding: 2rem;
+    margin-top: 60px; /* Leave space for the fixed navbar */
+}
+
+.content-area {
+    display: none;
+}
+
+/* Display the active content area */
+.active {
+    display: block;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #4A5568;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Button Styling */
+.edit-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #FFA500; /* Orange */
+    color: white;
+    margin-right: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #FF8C00; /* Darker Orange */
+}
+
+.delete-btn {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c62828; /* Darker Red */
+}
+

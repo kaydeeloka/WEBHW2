@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- jsPDF and AutoTable -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+       
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead tr {
+            background-color: #4a90e2;
+            color: white;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        /* Container and footer styles */
+        .subject-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .print-button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .print-button:hover {
+            background-color: #357ab7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="text-lg">STUDENT DASHBOARD</div>
+        <div class="nav-links">
+            <div> Hi {{ user.name }}       </div>
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>            
+            <button class="logout-btn">Change Password</button>
+        </div>
+    </div>
+
+    <div class="subject-container">
+        <div class="student-info">
+        <h1 class="text-3xl font-bold text-center mb-6">Report of Grades</h1>
+        <h2 class="text-2xl mb-6">Student name : {{ user.name }}</h2>
+        <h2 class="text-2xl mb-6">Student ID : {{ user.id }}</h2>
+        <h2 class="text-2xl mb-6">Department : {{ user.department }}</h2>
+
+
+        </div>
+        
+        <table id="gradesTable">
+            <thead>
+                <tr>
+                    <th>Semester</th>
+                    <th>Subject Code</th>
+                    <th>Grade</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.semester }}</td>
+                    <td>{{ grade.subject_code }}</td>
+                    <td>{{ grade.grade }}</td>
+                    <td>{{ grade.score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    
+        <div class="button-container">
+            <button class="print-button" onclick="printGrades()">Print Grades</button>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Sejong App</p>
+    </footer>
+
+    <!-- JavaScript for Filtering and Printing -->
+    <script>
+        // Redirect to the index page on Logout
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            window.location.href = '/index';
+        });
+
+      // Display Student Grades
+        async function fetchGrades() {
+            const studentId = localStorage.getItem('student_id'); // Assuming you store the student ID after login
+            const response = await fetch(`/student/${studentId}`);
+
+            if (response.ok) {
+                const grades = await response.json();
+                const tableBody = document.getElementById('gradesTable').querySelector('tbody'); // Select tbody correctly
+                tableBody.innerHTML = ''; // Clear previous content
+
+                if (grades.length > 0) {
+                    grades.forEach(grade => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${grade.semester}</td><td>${grade.subject_code}</td><td>${grade.grade}</td><td>${grade.score}</td>`; // Fill in all fields
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="4" class="text-center">No grades found for this student.</td>`; // Adjust colspan to match your table
+                    tableBody.appendChild(row);
+                }
+            } else {
+                alert('Error fetching grades.');
+            }
+        }
+
+        // On Load
+        window.onload = function() {
+            document.getElementById('student-greeting').innerText = 'Welcome, Student!';
+            fetchGrades();
+        };
+
+        // Function to print grades as a PDF
+        function printGrades() {
+            const { jsPDF } = window.jspdf;
+
+            const doc = new jsPDF();
+            doc.text("Report of Grades", 20, 10);
+
+            doc.autoTable({
+                html: '#gradesTable',
+                startY: 20,
+                theme: 'grid',
+                styles: { halign: 'center' }
+            });
+
+            doc.save('grades.pdf');
+        }
+    </script>
+
+</body>
+<html>

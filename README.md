@@ -5,7 +5,8 @@ Academic with flask API
 Directory Structure
 /your_app/
 - **/templates/**: # HTML Templates
-       -**base.html**
+ -**base.html**
+  
        -**login.html**             # render the login page, allowing users to enter credentials based in role.
        -**admin.html**            # admin users can manage the application, view reports,manage grades and subjects
        -**professor.html**        #professor-specific views, where they can see their courses, manage students, or view grades.      

@@ -46,9 +46,10 @@ This application is designed to manage academic records, providing functionaliti
     python -m venv venv (if already have can use your own venv)
 
 2. **Change the user preference for the PowerShell script execution policy**
+   ```bash
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process 
    
-3. **Activate venv**
+4. **Activate venv**
     source venv/bin/activate  # On Windows use
    ```bash
    venv\Scripts\activate.ps1

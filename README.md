@@ -11,7 +11,7 @@ Directory Structure
        -**professor.html**        #professor-specific views, where they can see their courses, manage students, or view grades.      
        -**student.html**          #displaying student information and print grades
 
-  - **/static/**: 
+- **/static/**: 
        -**style.css**  # CSS/JS Files
  
  - **app.py**:  # Main Flask App

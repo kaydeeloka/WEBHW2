@@ -50,19 +50,21 @@ This application is designed to manage academic records, providing functionaliti
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process 
    
 3. **Activate venv**
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    source venv/bin/activate  # On Windows use
+   ```bash
+   venv\Scripts\activate.ps1
     ```
 
-4. **Install dependencies**:
+5. **Install dependencies**:
     ```bash
     pip install -r requirements.txt
     ```
 
-5. **Set up your MySQL database**:
+6. **Set up your MySQL database**:
     - Create a database named `academic_records`/ make sure your db is linked
     - Update the database URI in `app.py` with your MySQL credentials.
 
-6. **Initialize the database**:
+7. **Initialize the database**:
     - Run the application once to create the necessary tables:
     ```bash
     python app.py

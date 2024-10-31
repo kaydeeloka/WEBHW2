@@ -4,23 +4,21 @@ Academic with flask API
 
 Directory Structure
 /your_app/
-│
-├── /templates/                # HTML Templates
-     ├── base.html             # Main html
-        ├── login.html             # render the login page, allowing users            				to enter credentials based in role.
-        ├── admin.html            # admin users can manage the application, 				view reports,manage grades and subjects
-        ├── professor.html        #professor-specific views, where they can 				see their courses, manage students, or view grades.      
-     └── student.html          #displaying student information and print grades
-|
-├── /static/                   # CSS/JS Files
-│   └── styles.css
-│
-├── app.py                     # Main Flask App
-├── models.py                  # ORM Models for User, Subject and Grade
-├── api_routes.py              # Routes for users, subjects and grades
-├── requirements.txt           #dependencies requirement
-└── unit_test.py                # Tests for the App
+- **/templates/**: # HTML Templates
+       -**base.html**
+       -**login.html**             # render the login page, allowing users to enter credentials based in role.
+       -**admin.html**            # admin users can manage the application, view reports,manage grades and subjects
+       -**professor.html**        #professor-specific views, where they can see their courses, manage students, or view grades.      
+       -**student.html**          #displaying student information and print grades
 
+  - **/static/**: 
+       -**style.css**  # CSS/JS Files
+ 
+ - **app.py**:  # Main Flask App
+ - **models.py**: # ORM Models for User, Subject and Grade
+ - **api_routes.py**: # Routes for users, subjects and grades
+ - **unit_test.py**:  # Tests for the App
+ - **requirements.txt**: #dependencies requirement
 
 This application is designed to manage academic records, providing functionalities for user registration, login, and managing subjects and grades.
  It includes both a RESTful API and a web frontend to facilitate interactions with the academic database.
